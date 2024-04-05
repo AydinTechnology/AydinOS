@@ -11,6 +11,7 @@ mov sp, bp
 main:
   mov si, tekst
   call print_text
+  jmp $
 
 print_text:
   cld
