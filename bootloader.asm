@@ -1,12 +1,16 @@
 [org 0x7c00]
 [bits 16]
 
-xor ax, ax
-mov ds, ax
-mov es, ax
-mov ss, ax
-mov bp, 0x7c00
-mov sp, bp
+  xor ax, ax
+  mov ds, ax
+  mov es, ax
+  mov ss, ax
+  mov bp, 0x7c00
+  mov sp, bp
+
+  xor ax, ax
+  mov al, 0x03
+  int 10h
 
 main:
   mov si, text
@@ -21,6 +25,7 @@ print_text:
   cmp al, 0
   je return
   int 0x10
+  jmp print_text
 
 linedown:
   mov ah, 0x03
