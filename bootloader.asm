@@ -9,7 +9,7 @@ mov bp, 0x7c00
 mov sp, bp
 
 main:
-  mov si, tekst
+  mov si, text
   call print_text
   call linedown
   jmp $
