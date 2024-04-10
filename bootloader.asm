@@ -11,6 +11,7 @@ mov sp, bp
 main:
   mov si, tekst
   call print_text
+  call linedown
   jmp $
 
 print_text:
@@ -21,10 +22,20 @@ print_text:
   je return
   int 0x10
 
+linedown:
+  mov ah, 0x03
+  xor bx, bx
+  int 0x10
+  mov ah, 0x02
+  xor dl, dl
+  inc dh
+  int 0x10
+  ret
+
 return:
   ret
 
-text: db "hallo test test", 0
+text: db "AydinOS 1.0", 0
 
 times 510 - ($ - $$) db 0
 dw 0xaa55
