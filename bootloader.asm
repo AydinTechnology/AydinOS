@@ -1,46 +1,82 @@
 [org 0x7c00]
 [bits 16]
 
-  xor ax, ax
-  mov ds, ax
-  mov es, ax
-  mov ss, ax
-  mov bp, 0x7c00
-  mov sp, bp
+	xor ax, ax
+	mov ds, ax
+	mov es, ax
+	mov ss, ax
+	mov bp, 0xffff
+	mov sp, bp
+	mov [bootdisk], dl
 
-  xor ax, ax
-  mov al, 0x03
-  int 10h
+bootfunc_main:
+	mov si, bootmsg
+	call bootfunc_printstring
+	call bootfunc_linedown
+	mov si, bootreadingdisk
+	call bootfunc_printstring
+	call bootfunc_linedown
 
-main:
-  mov si, text
-  call print_text
-  call linedown
-  jmp $
+	mov ax, 0x0202
+	mov cx, 0x0002
+	xor dh, dh
+	mov dl, [bootdisk]
+	mov bx, 0x7e00
+	int 0x13
 
-print_text:
-  cld
-  lodsb
-  mov ah, 0x0e
-  cmp al, 0
-  je return
-  int 0x10
-  jmp print_text
+	cmp byte [0x7e00], 25
+	jne bootfunc_diskfailure
 
-linedown:
-  mov ah, 0x03
-  xor bx, bx
-  int 0x10
-  mov ah, 0x02
-  xor dl, dl
-  inc dh
-  int 0x10
-  ret
+	mov si, bootstartingkernel
+	call bootfunc_printstring
+	call bootfunc_linedown
 
-return:
-  ret
+	jmp 0x8000
 
-text: db "AydinOS 1.0", 0
+bootfunc_printstring:
+	cld
+	lodsb
+	mov ah, 0x0e
+	cmp al, 0
+	je bootfunc_return
+	int 0x10
+	jmp bootfunc_printstring
+
+bootfunc_linedown:
+	mov ah, 0x03
+	xor bx, bx
+	int 0x10
+	mov ah, 0x02
+	xor dl, dl
+	inc dh
+	int 0x10
+	ret
+
+bootfunc_diskfailure:
+	mov si, bootdiskfailure
+	call bootfunc_printstring
+	jmp $
+	
+
+bootfunc_return:
+	ret
+
+bootmsg: db "Booting AydinOS 1.0...", 0
+bootreadingdisk: db "Reading disk...", 0
+bootdiskfailure: db "Disk read failure - booting halted.", 0
+bootstartingkernel: db "Starting AydinOS 1.0 kernel...", 0
+
+bootdisk: db 0
 
 times 510 - ($ - $$) db 0
 dw 0xaa55
+
+db 25
+
+times 512 * 2 - ($ - $$) db 0
+
+	mov ax, 0x0e45
+	int 0x10
+	jmp $
+
+times 512 * 3 - ($ - $$) db 0
