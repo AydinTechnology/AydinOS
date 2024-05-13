@@ -10,6 +10,9 @@
 	mov [bootdisk], dl
 
 bootfunc_main:
+	mov ax, 0x0003
+	int 0x10
+
 	mov si, bootmsg
 	call bootfunc_printstring
 	call bootfunc_linedown
@@ -17,7 +20,7 @@ bootfunc_main:
 	call bootfunc_printstring
 	call bootfunc_linedown
 
-	mov ax, 0x0202
+	mov ax, 0x020B
 	mov cx, 0x0002
 	xor dh, dh
 	mov dl, [bootdisk]
@@ -74,9 +77,3 @@ dw 0xaa55
 db 25
 
 times 512 * 2 - ($ - $$) db 0
-
-	mov ax, 0x0e45
-	int 0x10
-	jmp $
-
-times 512 * 3 - ($ - $$) db 0
