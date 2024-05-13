@@ -1,3 +1,3 @@
 # AydinOS
 
-AydinOS - de besturing system
+AydinOS - An operating system
