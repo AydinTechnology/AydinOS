@@ -1,3 +1,3 @@
 # AydinOS
 
-AydinOS - An operating system
+AydinOS - An x86 operating system
