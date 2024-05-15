@@ -64,10 +64,10 @@ bootfunc_diskfailure:
 bootfunc_return:
 	ret
 
-bootmsg: db "Booting AydinOS 1.0...", 0
+bootmsg: db "Booting AydinOS...", 0
 bootreadingdisk: db "Reading disk...", 0
 bootdiskfailure: db "Disk read failure - booting halted.", 0
-bootstartingkernel: db "Starting AydinOS 1.0 kernel...", 0
+bootstartingkernel: db "Starting AydinOS kernel...", 0
 
 bootdisk: db 0
 
