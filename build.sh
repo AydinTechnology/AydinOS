@@ -1,4 +1,4 @@
-export PATH=$PATH:/Users/a9257/Documents/projects
+export PATH=$PATH:
 
 nasm bootloader.asm -o boot.bin
 nasm kernel.asm -o kernel.bin
